@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SaaS Landing Template
 
-## Getting Started
+White-label landing page template for small startups/SaaS products. Built with Next.js,
+TypeScript, and Tailwind CSS. Demo content imagines a fictional workflow automation product
+called Flowpilot.
 
-First, run the development server:
+![Screenshot](docs/screenshot-hero.jpg)
+
+## Structure
+
+- `app/` - routes, including `/api/waitlist`
+- `components/` - section components: Nav, Footer, Hero, FeatureGrid, PricingTable,
+  FAQAccordion, WaitlistForm
+- `lib/sanity.ts` - Sanity client (read) and write client (waitlist signups)
+
+## Content
+
+Content (site settings, features, pricing plans, FAQ) is fetched live from Sanity. See
+`sanity/README.md` for how to deploy a Studio to edit it yourself.
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Waitlist form
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Posts to `/api/waitlist`, which writes a `waitlistSignup` document directly to Sanity using a
+write-enabled API token. Requires `SANITY_API_WRITE_TOKEN` to be set in the environment; without
+it, submissions are only logged to the server console (useful for local development).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Docker
 
-## Learn More
+```bash
+docker build -t saas-landing-template .
+docker run -p 3000:3000 saas-landing-template
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Re-skinning for a new client
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Edit `app/globals.css` CSS variables (`--color-primary`, `--color-accent`, etc.) for a new
+   brand palette.
+2. Edit content in Sanity Studio (product name, tagline, features, pricing, FAQ).
+3. Swap `public/` images and the favicon.
